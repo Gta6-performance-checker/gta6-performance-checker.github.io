@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#110e18">
+<meta name="description" content="Compare GTA 6 frame rate, resolution, stability and storage on PS5, PS5 Pro, Xbox Series X, Xbox Series S and PC.">
+<meta property="og:title" content="GTA 6 Performance Checker">
+<meta property="og:description" content="See how GTA VI runs across PlayStation and Xbox, and check the latest PC release status.">
+<link rel="canonical" href="https://gta6-performance-checker.github.io/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<title>GTA 6 Performance Checker</title>
+<style>
+:root{color-scheme:dark;--bg:#110e18;--surface:#1e1828;--line:#43374e;--pink:#ffabc7;--cyan:#a8e3de;--text:#f4eef8;--muted:#c7bbd1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:400 1rem/1.6 Inter,system-ui,sans-serif}
+a{color:var(--cyan);text-underline-offset:.24em}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
+[hidden]{display:none!important}
+.wrap{width:min(1120px,calc(100% - 2.5rem));margin-inline:auto}
+header{border-bottom:1px solid var(--line)}
+header .wrap{display:flex;justify-content:space-between;align-items:center;gap:1rem;padding-block:1rem}
+.brand{font-weight:900;letter-spacing:-.05em;color:var(--text);text-decoration:none}
+.brand span{color:var(--pink)}
+nav{display:flex;gap:clamp(.7rem,3vw,1.75rem);flex-wrap:wrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:700}
+nav a:hover,nav a:focus-visible{color:var(--cyan)}
+.hero{position:relative;overflow:hidden;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at 78% 24%,#481226 0%,transparent 50%),radial-gradient(ellipse at 95% 80%,#103337 0%,transparent 45%),#100d13}
+.hero .wrap{position:relative;padding-block:clamp(3.5rem,9vw,7.5rem)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(125deg,transparent 0 40px,#ffffff0c 41px 42px);mask-image:linear-gradient(90deg,transparent 22%,black);pointer-events:none}
+h1,h2,h3,p{margin:0}
+h1{max-width:850px;font-size:clamp(2.7rem,8vw,6.1rem);line-height:.99;letter-spacing:-.075em;font-weight:900}
+h1 span{display:block;color:#ff6684}
+h2{font-size:clamp(1.65rem,4vw,2.4rem);letter-spacing:-.055em;line-height:1.12;margin-bottom:1rem}
+h3{font-size:1.45rem;letter-spacing:-.035em}
+.hero p{margin-top:1.15rem;max-width:530px;color:#d7cbd8}
+.hero time,.eyebrow{display:block;color:var(--cyan);text-transform:uppercase;letter-spacing:.13em;font-size:.73rem;font-weight:800;margin-bottom:1rem}
+main>.wrap{padding-block:2.9rem}
+section+section{margin-top:2.8rem}
+.cards{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.65rem;margin-bottom:1rem}
+.cards button{text-align:left;min-height:82px;padding:.7rem .85rem;background:var(--surface);border:1px solid var(--line);border-radius:.75rem;font-weight:800}
+.cards button:hover{border-color:var(--cyan)}
+.cards button[aria-pressed=true]{border-color:var(--pink);background:#26121c;box-shadow:inset 0 -2px 0 var(--pink)}
+.cards small{display:block;color:var(--muted);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}
+.results{padding:clamp(1rem,4vw,2rem);border:1px solid var(--line);border-radius:1rem;background:linear-gradient(145deg,#1c1620,var(--surface) 58%)}
+.results h3{margin-bottom:1rem}
+dl{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:.65rem;margin:0 0 1.2rem}
+dl div{background:#0c0c11;border:1px solid var(--line);border-radius:.65rem;padding:.75rem}
+dt{font-size:.72rem;color:var(--muted)}
+dd{margin:.28rem 0 0;color:var(--cyan);font-weight:800;font-size:clamp(.83rem,2vw,1rem)}
+.note{color:var(--muted)}
+.note strong{display:block;color:var(--text);margin-bottom:.18rem}
+.table{overflow-x:auto;border:1px solid var(--line);border-radius:.85rem}
+table{width:100%;min-width:700px;border-collapse:collapse;text-align:left;background:var(--surface);font-size:.87rem}
+th,td{padding:.85rem .9rem;border-bottom:1px solid var(--line);vertical-align:top}
+thead{color:var(--cyan);background:#191921}
+tbody th{white-space:nowrap}
+tbody tr:last-child>*{border-bottom:0}
+.caption{color:var(--muted);font-size:.84rem;margin-top:.7rem}
+.ad{min-height:82px;display:grid;place-items:center;border:1px dashed #44404b;border-radius:.75rem;color:var(--muted);font-size:.75rem;letter-spacing:.09em;text-transform:uppercase;margin-block:2.5rem}
+details{border-bottom:1px solid var(--line);padding:.8rem 0}
+summary{cursor:pointer;font-weight:700;padding:.25rem 0}
+summary::marker{color:var(--pink)}
+details p{margin:.55rem 0 .3rem;color:var(--muted);max-width:75ch}
+footer{border-top:1px solid var(--line);padding-block:2rem 2.75rem;color:var(--muted);font-size:.84rem}
+footer p+p{margin-top:.65rem}
+footer strong{color:var(--text)}
+@media(max-width:720px){.cards{grid-template-columns:repeat(3,minmax(0,1fr))}dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:390px){.wrap{width:calc(100% - 2rem)}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.cards button{padding:.55rem .55rem .7rem}
+.cards img{display:block;width:100%;height:100px;object-fit:contain;background:#e3e4e9;border-radius:.45rem;margin-bottom:.55rem}
+.cards small,.cards strong{padding-inline:.25rem}
+.media-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem}
+.gallery{grid-template-columns:repeat(2,minmax(0,1fr))}
+.media-card{min-width:0;margin:0;overflow:hidden;background:var(--surface);border:1px solid var(--line);border-radius:.85rem}
+.media-card img,.player iframe{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#221323;border:0}
+.gallery img{object-position:center 40%}
+.media-copy{padding:.85rem 1rem}
+.media-copy h3{font-size:1.06rem;line-height:1.35}
+.media-copy p{color:var(--muted);font-size:.86rem;margin:.35rem 0}
+.player{position:relative}
+.video-play{display:grid;place-items:center;width:100%;border:0;padding:0;background:#1a1420}
+.video-play img,.video-play span{grid-area:1/1}
+.video-play span{z-index:1;border-radius:1rem;background:#ba1739;color:#fff;font-weight:800;padding:.4rem .85rem}
+.video-play:hover span{background:#95102e}
+@media(max-width:720px){.media-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.media-grid{grid-template-columns:minmax(0,1fr)}header .wrap{flex-wrap:wrap}.cards img{height:76px}}
+
+.hero::before{z-index:1;background:linear-gradient(90deg,#09070de8 0%,#100a14b8 48%,#100a1459 100%),linear-gradient(0deg,#09070dbd,transparent 58%);mask-image:none}
+.hero .wrap{z-index:2}
+.hero-slides,.hero-slides img{position:absolute;inset:0;width:100%;height:100%}
+.hero-slides img{object-fit:cover;object-position:center 40%}
+.hero-slides img+img{opacity:0}
+.hero.is-playing .hero-slides img+img{animation:hero-fade 8s ease-in-out infinite}
+.hero.is-paused .hero-slides img+img{animation-play-state:paused}
+@keyframes hero-fade{0%,43%,100%{opacity:0}50%,93%{opacity:1}}
+.hero-toggle{position:absolute;z-index:3;right:clamp(1rem,4vw,2rem);bottom:1rem;border:1px solid #ffffff55;border-radius:.5rem;background:#110b17e8;padding:.4rem .7rem;font-size:.75rem;font-weight:700}
+@media(max-width:600px){.hero::before{background:linear-gradient(90deg,#09070de0,#100a1490),linear-gradient(0deg,#09070da8,transparent 60%)}.hero .wrap{padding-bottom:4.5rem}}
+
+.hardware{margin-top:1.35rem;padding-top:1.15rem;border-top:1px solid var(--line)}
+.hardware h4{margin:0 0 .75rem;font-size:1rem}
+.hardware dl{grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:.6rem}
+@media(max-width:720px){.hardware dl{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.compare-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem;margin-bottom:1rem}
+.compare-controls label{font-size:.85rem;font-weight:700}
+.compare-controls select{display:block;width:100%;margin-top:.35rem;background:var(--surface);color:var(--text);border:1px solid var(--line);border-radius:.5rem;padding:.6rem;font:inherit}
+.compare-table{min-width:0;table-layout:fixed}
+.compare-table th,.compare-table td{white-space:normal;overflow-wrap:anywhere}
+.proof{margin-top:1.3rem;padding-top:1rem;border-top:1px solid var(--line)}
+.proof h4{margin:0 0 .55rem}
+.proof a{display:inline-flex;align-items:center;gap:.75rem;font-weight:700}
+.proof img{width:88px;height:50px;object-fit:cover;border-radius:.35rem}
+@media(max-width:500px){.compare-table{font-size:.76rem}.compare-table th,.compare-table td{padding:.5rem .35rem}}
+
+.buying-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,18rem),1fr));gap:1rem}
+.buying-card,.storage-box{background:var(--surface);border:1px solid var(--line);border-radius:.9rem;padding:1.15rem}
+.buying-card h3{line-height:1.2}
+.buying-card p+p,.buying-card h3+p{margin-top:.65rem}
+.storage-box form{display:flex;gap:.7rem;flex-wrap:wrap;align-items:end}
+.storage-box label{display:grid;gap:.3rem;flex:1 1 12rem;font-weight:700}
+.storage-box input,.storage-box button{border:1px solid var(--line);border-radius:.5rem;padding:.55rem .75rem;font:inherit}
+.storage-box input{width:100%;color:var(--text);background:var(--bg)}
+.storage-box button{background:var(--cyan);color:var(--bg);font-weight:800}
+.storage-box output{display:block;margin-top:.75rem;color:var(--cyan);font-weight:700}
+
+/* Typography, color, and interaction polish */
+body{font-size:clamp(1rem,.95rem + .24vw,1.125rem);line-height:1.65}
+header{background:#15121d}
+header .wrap{flex-wrap:wrap}
+nav{gap:.45rem clamp(.85rem,2.3vw,1.5rem)}
+nav a{font-size:.875rem}
+h1{font-size:clamp(2.25rem,6.7vw,5.5rem);line-height:1.04;letter-spacing:-.055em;overflow-wrap:anywhere;text-shadow:0 2px 14px #08060e90}
+h1 span{color:var(--pink)}
+h2{font-size:clamp(1.65rem,3.8vw,2.55rem);letter-spacing:-.038em;line-height:1.15}
+h3{letter-spacing:-.025em}
+.hero p{color:#f0e7f5}
+.hero::before{background:linear-gradient(90deg,#0d0915f2 0%,#140f1dd9 49%,#180e2466 100%),linear-gradient(0deg,#0e0a15a8,transparent 62%)}
+.results{background:linear-gradient(145deg,#271d32,var(--surface) 67%)}
+dl div{background:#16111e}
+dt,.caption,.media-copy p,footer{font-size:.875rem}
+dd{font-size:clamp(.925rem,1.2vw,1.05rem)}
+summary{line-height:1.45}
+table{font-size:.925rem}
+thead{background:#261e32}
+.compare-table{font-size:clamp(.875rem,1.3vw,.975rem)}
+.cards button[aria-pressed=true]{background:#362139}
+.cards button,.media-card,.buying-card,.storage-box button{transition:background-color .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
+@keyframes content-in{from{opacity:.7;transform:translateY(.4rem)}to{opacity:1;transform:translateY(0)}}
+.hero .wrap,#results h3{animation:content-in .4s ease-out both}
+details[open] p{animation:content-in .23s ease-out both}
+@media(hover:hover) and (pointer:fine){
+  .cards button:hover,.media-card:hover,.buying-card:hover{transform:translateY(-3px);border-color:var(--cyan)}
+  .storage-box button:hover{box-shadow:0 0 0 3px #a8e3de38}
+}
+@media(max-width:600px){.hero::before{background:linear-gradient(90deg,#0d0915ec,#140f1dcb),linear-gradient(0deg,#0e0a15ab,transparent 65%)}}
+@media(max-width:500px){.compare-table th,.compare-table td{padding:.6rem .38rem}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .cards button:hover,.media-card:hover,.buying-card:hover{transform:none}
+}
+</style>
+</head>
+<body>
+<header><div class="wrap"><a class="brand" href="./">GTA <span>VI</span></a><nav aria-label="Page sections"><a href="#checker">Checker</a><a href="#compare">Compare</a><a href="#benchmarks">Benchmarks</a><a href="#videos">Videos</a><a href="#gallery">Gallery</a><a href="#buying-guides">Buying guides</a><a href="#storage-checker">Storage</a><a href="#faq">FAQ</a></nav></div></header>
+<main>
+<section class="hero" aria-labelledby="title">
+<div class="hero-slides" aria-hidden="true">
+<img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_14_Mobile.17zv0lmevzbgs.jpg?akim=1&amp;imwidth=960" alt="" fetchpriority="high" decoding="async">
+<img src="https://www.rockstargames.com/VI/_next/static/media/launch-trailer-mobile.11.007xolt5y2.jpg?akim=1&amp;imwidth=960" alt="" decoding="async">
+</div>
+<div class="wrap">
+<time datetime="2026-11-22">Updated November 22, 2026</time>
+<h1 id="title">GTA 6 <span>Performance Checker</span></h1>
+<p>Compare frame rate, resolution, stability and storage. Pick your platform to see how GTA VI runs.</p>
+</div>
+<button type="button" class="hero-toggle" hidden>Pause slideshow</button>
+</section>
+<div class="wrap">
+<section id="checker" aria-labelledby="checker-title">
+<h2 id="checker-title">Choose your platform</h2>
+<div class="cards" role="group" aria-label="Platforms">
+<button type="button" aria-pressed="true" aria-controls="results" data-platform="0"><img src="https://store.sony.co.nz/on/demandware.static/-/Sites-sony-master-catalog/default/dw1b537bbb/images/PLAYSTATION5W/PLAYSTATION5W.png" alt="" width="220" height="100" decoding="async"><small>PlayStation</small><strong>PS5</strong></button>
+<button type="button" aria-pressed="false" aria-controls="results" data-platform="1"><img src="https://multimedia.bbycastatic.ca/multimedia/products/1500x1500/184/18477/18477929.jpg" alt="" width="220" height="100" decoding="async"><small>PlayStation</small><strong>PS5 Pro</strong></button>
+<button type="button" aria-pressed="false" aria-controls="results" data-platform="2"><img src="https://cdn.grupoelcorteingles.es/SGFM/dctm/MEDIA03/202009/21/00194482000018____5__1200x1200.jpg" alt="" width="220" height="100" decoding="async"><small>Xbox</small><strong>Xbox Series X</strong></button>
+<button type="button" aria-pressed="false" aria-controls="results" data-platform="3"><img src="https://assets.xboxservices.com/assets/07/a9/07a93846-20c6-4ccd-9b0a-88718a99f894.png?n=389964_Hero-Gallery-0_A2_857x676.png" alt="" width="220" height="100" decoding="async"><small>Xbox</small><strong>Xbox Series S</strong></button>
+<button type="button" aria-pressed="false" aria-controls="results" data-platform="4"><img src="https://img.pccomponentes.com/articles/1042/10428963/149-pc-racing-cosmo-gaming-pc-gaming-intel-core-i5-11400f-16gb-1tb-ssd-rtx-3050-windows-11.jpg" alt="" width="220" height="100" decoding="async"><small>Windows</small><strong>PC</strong></button>
+</div>
+<div class="results" id="results" aria-live="polite" aria-atomic="true">
+<span class="eyebrow">PlayStation</span><h3>PS5</h3>
+<dl><div><dt>Target FPS</dt><dd>30 FPS</dd></div><div><dt>Resolution</dt><dd>≈1440p → 4K</dd></div><div><dt>Stability</dt><dd>Mostly steady</dd></div><div><dt>Storage</dt><dd>Up to 212 GB</dd></div></dl>
+<p class="note"><strong>Key features and notes</strong><span>Rockstar’s temporal upscaling reconstructs a 4K image. Independent testing reported occasional minor dips.</span></p>
+<section class="hardware" aria-labelledby="hardware-title">
+<h4 id="hardware-title">Console hardware specs</h4>
+<dl><div><dt>CPU</dt><dd>AMD Zen 2 · 8 cores / 16 threads</dd></div><div><dt>GPU</dt><dd>AMD Radeon RDNA-based · ≈10 TFLOPS</dd></div><div><dt>Memory</dt><dd>16 GB GDDR6</dd></div><div><dt>Built-in SSD</dt><dd>825 GB custom SSD</dd></div><div><dt>Disc drive</dt><dd>4K UHD Blu-ray</dd></div></dl>
+<p class="caption"><span>Original PS5 disc model shown. SSD capacity varies by revision.</span> <a href="https://www.playstation.com/content/dam/global_pdc/en-in/corporate/support/manuals/ps5-docs/1200a/CFI-12XXA_PS5_Safety_Guide%24en-in.pdf">Manufacturer specs</a></p>
+</section>
+<section class="proof" aria-labelledby="proof-title" hidden><h4 id="proof-title">Benchmark video</h4><a href="#"><img alt="" width="88" height="50"><span></span></a><p class="caption"><time datetime="2026-11-18">Published November 18, 2026</time> · Digital Foundry</p></section>
+</div>
+</section>
+<aside class="ad" id="ad-slot-1" aria-label="Advertisement placeholder">AdSense placeholder</aside>
+<section id="compare" aria-labelledby="compare-title" hidden>
+<h2 id="compare-title">Compare two consoles</h2>
+<div class="compare-controls"><label>First console<select id="compare-first"><option value="0" selected>PS5</option><option value="1">PS5 Pro</option><option value="2">Xbox Series X</option><option value="3">Xbox Series S</option></select></label><label>Second console<select id="compare-second"><option value="0">PS5</option><option value="1" selected>PS5 Pro</option><option value="2">Xbox Series X</option><option value="3">Xbox Series S</option></select></label></div>
+<div class="table"><table class="compare-table"><thead><tr><th scope="col">Spec</th><th scope="col"></th><th scope="col"></th></tr></thead>
+<tbody><tr><th scope="row">Target FPS</th><td></td><td></td></tr><tr><th scope="row">Resolution</th><td></td><td></td></tr><tr><th scope="row">Stability</th><td></td><td></td></tr><tr><th scope="row">Observed frame rate</th><td></td><td></td></tr><tr><th scope="row">Frame drops</th><td></td><td></td></tr><tr><th scope="row">CPU</th><td></td><td></td></tr><tr><th scope="row">GPU</th><td></td><td></td></tr><tr><th scope="row">RAM</th><td></td><td></td></tr><tr><th scope="row">Built-in SSD</th><td></td><td></td></tr></tbody></table></div>
+<p class="caption">Observed frame rates come from Digital Foundry’s November 2026 launch tests.</p>
+</section>
+<section id="comparison" aria-labelledby="comparison-title">
+<h2 id="comparison-title">Platform comparison</h2>
+<div class="table" role="region" aria-labelledby="comparison-title" tabindex="0">
+<table><thead><tr><th scope="col">Platform</th><th scope="col">Target FPS</th><th scope="col">Resolution</th><th scope="col">Stability</th><th scope="col">Storage</th><th scope="col">Key features and notes</th></tr></thead>
+<tbody><tr><th scope="row">PS5</th><td>30 FPS</td><td>≈1440p → 4K</td><td>Mostly steady</td><td>Up to 212 GB</td><td>Rockstar’s temporal upscaling reconstructs a 4K image. Independent testing reported occasional minor dips.</td></tr>
+<tr><th scope="row">PS5 Pro</th><td>30 FPS</td><td>≈1440p → 4K via PSSR 2</td><td>Mostly steady</td><td>Up to 212 GB</td><td>PlayStation Spectral Super Resolution improves image clarity. PS5 Pro also adds exclusive ray-traced shadows.</td></tr>
+<tr><th scope="row">Xbox Series X</th><td>30 FPS</td><td>≈1440p → 4K</td><td>Mostly steady</td><td>Up to 212 GB</td><td>Rockstar’s temporal upscaling reconstructs a 4K image. Independent testing reported occasional minor dips.</td></tr>
+<tr><th scope="row">Xbox Series S</th><td>30 FPS</td><td>720p → 1080p</td><td>More variable</td><td>Up to 212 GB</td><td>AMD FidelityFX Super Resolution (FSR) upscales to 1080p. Expect a softer image and more frequent frame-rate dips.</td></tr>
+<tr><th scope="row">PC</th><td>Unknown</td><td>Unknown</td><td>Unknown</td><td>Unknown</td><td>Rockstar has yet to announce a PC version, release date or system requirements.</td></tr></tbody></table>
+</div>
+<p class="caption">Resolution shows internal render resolution and upscaled output where both are available. Stability reflects launch testing and can vary by scene or patch.</p><p class="caption">Hardware photos: Sony, Best Buy, El Corte Inglés, Microsoft and PcComponentes. The PC image is illustrative.</p>
+</section>
+<section id="benchmarks" aria-labelledby="benchmarks-title">
+<h2 id="benchmarks-title">Launch performance benchmarks</h2>
+<div class="table" role="region" aria-labelledby="benchmarks-title" tabindex="0">
+<table><thead><tr><th scope="col">Platform</th><th scope="col">Observed frame rate</th><th scope="col">Demanding scenes</th><th scope="col">Upscaling</th></tr></thead>
+<tbody><tr><th scope="row">PS5</th><td>Usually near 30 FPS</td><td>Minor driving dips and longer drops in heavy combat stress tests.</td><td>Rockstar TAA</td></tr>
+<tr><th scope="row">PS5 Pro</th><td>Near 30 FPS with consistent pacing</td><td>About 24 FPS in the harshest reported stress test. The reviewer reported over 50 hours without seeing a dip outside stress tests.</td><td>PSSR 2</td></tr>
+<tr><th scope="row">Xbox Series X</th><td>Usually near 30 FPS (≈33 ms per frame)</td><td>Occasional dips in busy chases or fights.</td><td>Rockstar TAA</td></tr>
+<tr><th scope="row">Xbox Series S</th><td>Mid-20s in several driving and combat scenes</td><td>Around 20 FPS in especially demanding scenes. Cutscenes and walking generally held up better.</td><td>AMD FSR 4</td></tr>
+<tr><th scope="row">PC</th><td>Unavailable</td><td>Rockstar has yet to announce a PC version.</td><td>—</td></tr></tbody></table>
+</div>
+<p class="caption">Digital Foundry’s November 2026 tests covered gameplay and deliberately demanding scenes. The figures describe those runs. Averages and 1% lows are unavailable from these sources. <a href="https://www.videogameschronicle.com/news/gta-6-base-ps5-performance-analysis-shows-struggle-to-maintain-30-fps-at-all-times/">PlayStation analysis</a> · <a href="https://www.videogameschronicle.com/news/gta-6-xbox-series-s-performance-analysis-admires-the-effort-but-says-significant-frame-drops-are-a-problem/">Xbox analysis</a></p>
+</section>
+<section id="videos" aria-labelledby="videos-title">
+<h2 id="videos-title">Benchmark videos</h2>
+<div class="media-grid">
+<article class="media-card"><div class="player">
+<button class="video-play" type="button" data-video="qsBU0bcpONA" data-start="2838" aria-label="Play PS5 and PS5 Pro technical review">
+<img src="https://i.ytimg.com/vi/qsBU0bcpONA/hqdefault.jpg" alt="" width="480" height="270" loading="lazy" decoding="async"><span aria-hidden="true">▶ Play</span></button>
+</div><div class="media-copy"><h3>PS5 and PS5 Pro technical review</h3><p>Frame pacing, stress tests and the base PS5 comparison.</p><a href="https://www.youtube.com/watch?v=qsBU0bcpONA&amp;t=2838s">Watch on YouTube</a></div></article>
+<article class="media-card"><div class="player">
+<button class="video-play" type="button" data-video="F3lxGD8HX2k" data-start="0" aria-label="Play Xbox Series X and Series S technical review">
+<img src="https://i.ytimg.com/vi/F3lxGD8HX2k/hqdefault.jpg" alt="" width="480" height="270" loading="lazy" decoding="async"><span aria-hidden="true">▶ Play</span></button>
+</div><div class="media-copy"><h3>Xbox Series X and Series S technical review</h3><p>Frame rates and image quality across both Xbox consoles.</p><a href="https://www.youtube.com/watch?v=F3lxGD8HX2k">Watch on YouTube</a></div></article>
+<article class="media-card"><div class="player">
+<button class="video-play" type="button" data-video="Nmn2ibJAOhc" data-start="0" aria-label="Play PS5 vs PS5 Pro performance highlights">
+<img src="https://i.ytimg.com/vi/Nmn2ibJAOhc/hqdefault.jpg" alt="" width="480" height="270" loading="lazy" decoding="async"><span aria-hidden="true">▶ Play</span></button>
+</div><div class="media-copy"><h3>PS5 vs PS5 Pro performance highlights</h3><p>A shorter walkthrough of the PlayStation benchmark from DF Clips.</p><a href="https://www.youtube.com/watch?v=Nmn2ibJAOhc">Watch on YouTube</a></div></article>
+</div></section>
+<section id="gallery" aria-labelledby="gallery-title">
+<h2 id="gallery-title">GTA VI gallery</h2>
+<div class="media-grid gallery">
+<figure class="media-card"><img src="https://www.rockstargames.com/VI/_next/static/media/Jason_and_Lucia_14_Mobile.17zv0lmevzbgs.jpg?akim=1&amp;imwidth=960" alt="Jason and Lucia" width="960" height="540" loading="lazy" decoding="async"><figcaption class="media-copy">Launch Gallery · Rockstar Games</figcaption></figure>
+<figure class="media-card"><img src="https://www.rockstargames.com/VI/_next/static/media/launch-trailer-mobile.11.007xolt5y2.jpg?akim=1&amp;imwidth=960" alt="GTA VI launch trailer still" width="960" height="540" loading="lazy" decoding="async"><figcaption class="media-copy">Launch trailer · Rockstar Games</figcaption></figure>
+</div><p class="caption"><a href="https://www.rockstargames.com/VI/launch-gallery">View Rockstar’s official gallery</a></p>
+</section>
+<section id="buying-guides" aria-labelledby="buying-title">
+<h2 id="buying-title">GTA VI console buying guides</h2>
+<div class="buying-grid">
+<article class="buying-card" id="ps5-vs-ps5-pro">
+<h3>PS5 vs PS5 Pro for GTA VI</h3>
+<p><strong>Already own a PS5? Keep it if your main reason to upgrade is FPS.</strong> Both consoles target 30 FPS. PS5 Pro is worth considering if you care about steadier frame pacing, cleaner detail on a 4K display, and exclusive ray-traced shadows.</p>
+<p>Buying new? Compare the total price including a disc drive if you want physical games. The Pro sells the drive separately.</p>
+<p><a href="#benchmarks">Check launch benchmarks</a> · <a href="https://www.amazon.in/s?k=PS5%20Pro%20console">Check PS5 Pro listings in India</a></p>
+</article>
+<article class="buying-card" id="series-x-vs-series-s">
+<h3>Xbox Series X vs Series S for GTA VI</h3>
+<p><strong>Choose Series X if GTA VI is the main reason you’re buying.</strong> Both target 30 FPS. Launch tests found longer dips on Series S in driving and combat, and it reconstructs a 1080p image from 720p. Series X offers a sharper image and steadier performance.</p>
+<p>Series S can still make sense on a tight budget. Compare the price after including an expansion card if your existing library already fills the SSD.</p>
+<p><a href="#benchmarks">Check launch benchmarks</a> · <a href="https://www.amazon.in/s?k=Xbox%20Series%20X%20console">Check Series X listings in India</a></p>
+</article>
+</div>
+<p class="caption">Store links are standard links. Check the seller, warranty and delivery before buying.</p>
+</section>
+<section id="storage-checker" aria-labelledby="storage-title">
+<h2 id="storage-title">GTA VI storage checker</h2>
+<div class="storage-box">
+<p>Use 212 GB as a planning estimate. Actual install size can vary by console and patch. Leave extra room for updates.</p>
+<form id="storage-form">
+<label>Free space on your console (GB)<input id="free-space" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 250" required></label>
+<button type="submit">Check free space</button>
+</form>
+<output id="storage-result" for="free-space" aria-live="polite"></output>
+</div>
+<div class="buying-grid">
+<article class="buying-card"><h3>PS5 and PS5 Pro storage</h3><p>Look for a compatible PCIe Gen4 x4 M.2 NVMe SSD with a heatsink. Sony recommends at least 5,500 MB/s sequential read speed. Check physical dimensions before buying.</p><p><a href="https://www.playstation.com/en-us/support/hardware/ps5-install-m2-ssd/">Sony’s SSD requirements</a> · <a href="https://www.amazon.in/s?k=PS5%20M.2%20NVMe%20SSD%20heatsink%201TB">Browse SSD listings</a></p></article>
+<article class="buying-card"><h3>Xbox Series X and Series S storage</h3><p>Use an Xbox Series X|S Storage Expansion Card to play optimized games from expanded storage. Use USB storage to archive optimized games and move them back when needed.</p><p><a href="https://news.xbox.com/en-us/2020/09/24/xbox-series-x-and-xbox-series-s-custom-storage-solution-primer/">Xbox storage guide</a> · <a href="https://www.amazon.in/s?k=Xbox%20Series%20X%20S%20storage%20expansion%20card">Browse expansion cards</a></p></article>
+</div>
+</section>
+<section id="faq" aria-labelledby="faq-title">
+<h2 id="faq-title">Frequently asked questions</h2>
+<details><summary>Will PS5 Pro get 60 FPS?</summary><p>PS5 Pro targets 30 FPS at launch. Its enhancements are PSSR upscaling and exclusive ray-traced shadows.</p></details>
+<details><summary>When is GTA 6 coming to PC?</summary><p>Rockstar has yet to announce a PC version or release date. The official launch platforms are PS5 and Xbox Series X|S.</p></details>
+<details><summary>How much storage does it need?</summary><p>Budget up to 212 GB on consoles and leave extra free space for updates. The installed size can vary by device and game version.</p></details>
+<details><summary>Is Xbox Series S good enough?</summary><p>Yes, if you’re comfortable with a 30 FPS target and a softer image. It uses FSR to upscale 720p to 1080p, and testing found more frame-rate dips than on the higher-end consoles.</p></details>
+<details><summary>Will there be a 60 FPS patch later?</summary><p>Rockstar has announced no 60 FPS patch. Its technology production director cited CPU limits for the game’s simulation on PS5 Pro, so a future patch is uncertain.</p></details>
+</section>
+<aside class="ad" id="ad-slot-2" aria-label="Advertisement placeholder">AdSense placeholder</aside>
+</div>
+</main>
+<footer><div class="wrap">
+<p><strong>Disclaimer.</strong> Independent fan reference. GTA VI and related marks belong to their respective owners. This site has no affiliation with Rockstar Games or Take-Two Interactive. Performance and storage can change with patches and vary by device.</p>
+<p>Sources &middot; <a href="https://www.rockstargames.com/VI/out-now">Rockstar Games</a> &middot; <a href="https://www.videogameschronicle.com/news/rockstar-confirms-gta-6-targets-30-fps-with-ps5-pro-exclusive-ray-tracing/">Frame-rate targets</a> &middot; <a href="https://www.tomshardware.com/video-games/console-gaming/gta-vi-runs-at-1440p-on-ps5-and-xbox-series-x-but-just-720p-with-upscaling-on-series-s-rockstar-details-upscaling-technologies-for-launch">Resolution</a> &middot; <a href="https://www.gamesradar.com/games/grand-theft-auto/gta-6-at-60fps-on-ps5-pro-isnt-possible-because-the-console-is-not-powerful-enough-rockstar-says/">Stability and 60 FPS</a> &middot; <a href="https://gtaplaybook.com/gta6/answers/file-size/">Storage</a></p>
+</div></footer>
+<script>
+const platforms = [["PS5","PlayStation","30 FPS","≈1440p → 4K","Mostly steady","Up to 212 GB","Rockstar’s temporal upscaling reconstructs a 4K image. Independent testing reported occasional minor dips."],["PS5 Pro","PlayStation","30 FPS","≈1440p → 4K via PSSR 2","Mostly steady","Up to 212 GB","PlayStation Spectral Super Resolution improves image clarity. PS5 Pro also adds exclusive ray-traced shadows."],["Xbox Series X","Xbox","30 FPS","≈1440p → 4K","Mostly steady","Up to 212 GB","Rockstar’s temporal upscaling reconstructs a 4K image. Independent testing reported occasional minor dips."],["Xbox Series S","Xbox","30 FPS","720p → 1080p","More variable","Up to 212 GB","AMD FidelityFX Super Resolution (FSR) upscales to 1080p. Expect a softer image and more frequent frame-rate dips."],["PC","Windows","Unknown","Unknown","Unknown","Unknown","Rockstar has yet to announce a PC version, release date or system requirements."]];
+const buttons = document.querySelectorAll('[data-platform]');
+const result = document.querySelector('#results');
+const values = result.querySelectorAll(':scope > dl dd');
+const hardware = result.querySelector('.hardware');
+const hardwareValues = hardware.querySelectorAll('dd');
+const hardwareNote = hardware.querySelector('.caption span');
+const hardwareSource = hardware.querySelector('a');
+const consoleHardware = [
+  [
+    [
+      "AMD Zen 2 · 8 cores / 16 threads",
+      "AMD Radeon RDNA-based · ≈10 TFLOPS",
+      "16 GB GDDR6",
+      "825 GB custom SSD",
+      "4K UHD Blu-ray"
+    ],
+    "Original PS5 disc model shown. SSD capacity varies by revision.",
+    "https://www.playstation.com/content/dam/global_pdc/en-in/corporate/support/manuals/ps5-docs/1200a/CFI-12XXA_PS5_Safety_Guide%24en-in.pdf"
+  ],
+  [
+    [
+      "AMD Zen 2 · 8 cores / 16 threads",
+      "AMD Radeon RDNA-based · 16.7 TFLOPS",
+      "16 GB GDDR6 + 2 GB DDR5",
+      "2 TB custom SSD",
+      "Optional add-on"
+    ],
+    "The disc drive is sold separately.",
+    "https://www.playstation.com/content/dam/global_pdc/en/corporate/support/manuals/ps5-docs/7000/CFI-7019_PS5_Safety_Guide_Web%24en.pdf"
+  ],
+  [
+    [
+      "AMD Zen 2 · 8 cores",
+      "Custom AMD RDNA 2 · 12 TFLOPS",
+      "16 GB GDDR6",
+      "1 TB custom NVMe SSD",
+      "4K UHD Blu-ray"
+    ],
+    "Specs shown for the Carbon Black disc model.",
+    "https://www.xbox.com/en-IN/consoles/xbox-series-x"
+  ],
+  [
+    [
+      "AMD Zen 2 · 8 cores",
+      "Custom AMD RDNA 2 · 4 TFLOPS",
+      "10 GB GDDR6",
+      "512 GB or 1 TB custom NVMe SSD",
+      "Digital only"
+    ],
+    "SSD capacity depends on the edition.",
+    "https://www.xbox.com/en-in/consoles/xbox-series-s?xr=shellnav"
+  ]
+];
+
+const benchmarkRows = [...document.querySelectorAll('#benchmarks tbody tr')];
+const benchmarkProof = result.querySelector('.proof');
+const proofLink = benchmarkProof.querySelector('a');
+const proofThumbnail = proofLink.querySelector('img');
+const proofLabel = proofLink.querySelector('span');
+const proofVideos = [
+  ['qsBU0bcpONA', 2968, 'PS5 frame-rate analysis · 49:28'],
+  ['qsBU0bcpONA', 2838, 'PS5 Pro frame-rate analysis · 47:18'],
+  ['F3lxGD8HX2k', 0, 'Xbox Series X and Series S technical review'],
+  ['F3lxGD8HX2k', 0, 'Xbox Series X and Series S technical review']
+];
+
+function showBenchmarkProof(platformIndex) {
+  const video = proofVideos[platformIndex];
+  benchmarkProof.hidden = !video;
+  if (!video) return;
+
+  const [id, start, label] = video;
+  proofLink.href = 'https://www.youtube.com/watch?v=' + id + (start ? '&t=' + start + 's' : '');
+  proofThumbnail.src = 'https://i.ytimg.com/vi/' + id + '/hqdefault.jpg';
+  proofLabel.textContent = label;
+}
+
+const comparison = document.querySelector('#compare');
+const comparisonSelectors = [...comparison.querySelectorAll('select')];
+const comparisonHeaders = [...comparison.querySelectorAll('thead th')].slice(1);
+const comparisonRows = [...comparison.querySelectorAll('tbody tr')];
+
+function updateComparison() {
+  comparisonSelectors.forEach((select, column) => {
+    const index = Number(select.value);
+    const [name, , fps, resolution, stability] = platforms[index];
+    const [, observed, drops] = benchmarkRows[index].cells;
+    const values = [fps, resolution, stability, observed.textContent, drops.textContent,
+      ...consoleHardware[index][0].slice(0, 4)];
+
+    comparisonHeaders[column].textContent = name;
+    comparisonRows.forEach((row, rowIndex) => {
+      row.cells[column + 1].textContent = values[rowIndex];
+    });
+  });
+}
+
+comparisonSelectors.forEach(select => select.addEventListener('change', updateComparison));
+updateComparison();
+comparison.hidden = false;
+showBenchmarkProof(0);
+
+buttons.forEach(button => {
+  button.addEventListener('click', () => {
+    const [name, family, ...specs] = platforms[Number(button.dataset.platform)];
+    buttons.forEach(option => option.setAttribute('aria-pressed', String(option === button)));
+    result.querySelector('h3').textContent = name;
+    result.querySelector('.eyebrow').textContent = family;
+    values.forEach((value, index) => { value.textContent = specs[index]; });
+    result.querySelector('.note span').textContent = specs[4];
+
+    const consoleSpecs = consoleHardware[Number(button.dataset.platform)];
+    hardware.hidden = !consoleSpecs;
+    showBenchmarkProof(Number(button.dataset.platform));
+    if (consoleSpecs) {
+      const [details, note, source] = consoleSpecs;
+      hardwareValues.forEach((value, index) => { value.textContent = details[index]; });
+      hardwareNote.textContent = note;
+      hardwareSource.href = source;
+    }
+  });
+});
+
+document.querySelectorAll('[data-video]').forEach(button => {
+  button.addEventListener('click', () => {
+    const player = document.createElement('iframe');
+    player.title = button.getAttribute('aria-label');
+    player.src = 'https://www.youtube-nocookie.com/embed/' + button.dataset.video
+      + '?autoplay=1&start=' + button.dataset.start;
+    player.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+    player.allowFullscreen = true;
+    button.replaceWith(player);
+    player.focus();
+  });
+});
+
+const hero = document.querySelector('.hero');
+const slideToggle = document.querySelector('.hero-toggle');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+function setSlideshowPreference() {
+  hero.classList.toggle('is-playing', !reducedMotion.matches);
+  hero.classList.remove('is-paused');
+  slideToggle.hidden = reducedMotion.matches;
+  slideToggle.textContent = 'Pause slideshow';
+}
+
+setSlideshowPreference();
+reducedMotion.addEventListener('change', setSlideshowPreference);
+slideToggle.addEventListener('click', () => {
+  const paused = hero.classList.toggle('is-paused');
+  slideToggle.textContent = paused ? 'Play slideshow' : 'Pause slideshow';
+});
+
+const storageForm = document.querySelector('#storage-form');
+const freeSpace = document.querySelector('#free-space');
+const storageResult = document.querySelector('#storage-result');
+const formatSpace = new Intl.NumberFormat('en-IN', { maximumFractionDigits: 3 });
+
+storageForm.addEventListener('submit', event => {
+  event.preventDefault();
+  const available = freeSpace.valueAsNumber;
+  if (!Number.isFinite(available) || available < 0) return;
+
+  const remaining = available - 212;
+  const amount = formatSpace.format(Math.abs(remaining));
+  if (remaining < 0) {
+    storageResult.textContent = 'Free up about ' + amount + ' GB to reach the 212 GB estimate.';
+  } else if (remaining === 0) {
+    storageResult.textContent = 'You meet the 212 GB estimate. Free up extra space for updates.';
+  } else {
+    storageResult.textContent = 'About ' + amount + ' GB would remain after a 212 GB install.';
+  }
+});
+freeSpace.addEventListener('input', () => { storageResult.textContent = ''; });
+</script>
+</body>
+</html>
